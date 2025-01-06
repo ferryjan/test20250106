@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS Test</title>
+</head>
+<body>
+    <h1>CORS Policy Test</h1>
+    <button id="testRequest">Send API Request</button>
+    <div id="output"></div>
+
+    <script>
+        // Replace with your API endpoint
+        const apiUrl = "https://localhost:44327/RundownTemplatesSettings";
+
+        // Function to send a fetch request
+        async function testCORS() {
+            const output = document.getElementById("output");
+            output.textContent = "Sending request...";
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+						"Origin": "https://www.aiproducer.com"
+                    }
+                });
+
+                // Check if the response is successful
+                if (response.ok) {
+                    const data = await response.json();
+                    output.textContent = "Response received: " + JSON.stringify(data, null, 2);
+                } else {
+                    output.textContent = `Request failed with status ${response.status}`;
+                }
+
+                console.log("Response Headers:", Array.from(response.headers.entries()));
+            } catch (error) {
+                output.textContent = "Error occurred: " + error.message;
+                console.error("CORS Error:", error);
+            }
+        }
+
+        // Add event listener to the button
+        document.getElementById("testRequest").addEventListener("click", testCORS);
+    </script>
+</body>
+</html>
